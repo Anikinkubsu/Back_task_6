@@ -7,9 +7,9 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 $db_host = 'localhost';
-$db_name = 'u68895';
-$db_user = 'u68895';
-$db_pass = '1562324';
+$db_name = 'u68908';
+$db_user = 'u68908';
+$db_pass = '9704645';
 
 function getPDO() {
     global $db_host, $db_name, $db_user, $db_pass;
