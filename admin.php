@@ -13,9 +13,9 @@ if (!isset($_SERVER['PHP_AUTH_USER']) ||
 
 // Подключение к базе данных
 $db_host = 'localhost';
-$db_name = 'u68527';
-$db_user = 'u68527';
-$db_pass = '5678625';
+$db_name = 'u68908';
+$db_user = 'u68908';
+$db_pass = '9704645';
 
 try {
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
