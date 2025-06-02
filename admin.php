@@ -37,10 +37,6 @@ if ($action === 'delete' && $id) {
         $stmt = $pdo->prepare("DELETE FROM application_languages WHERE application_id = ?");
         $stmt->execute([$id]);
         
-        // Удаляем пользователя
-        $stmt = $pdo->prepare("DELETE FROM users WHERE application_id = ?");
-        $stmt->execute([$id]);
-        
         // Удаляем заявку
         $stmt = $pdo->prepare("DELETE FROM applications WHERE id = ?");
         $stmt->execute([$id]);
@@ -83,13 +79,13 @@ $all_languages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save'])) {
     $id = $_POST['id'];
     $data = [
-        'fullname' => $_POST['fullname'],
+        'full_name' => $_POST['fullname'],
         'phone' => $_POST['phone'],
         'email' => $_POST['email'],
-        'birthdate' => $_POST['birthdate'],
+        'birth_date' => $_POST['birthdate'],
         'gender' => $_POST['gender'],
-        'bio' => $_POST['bio'],
-        'contract_' => isset($_POST['contract_']) ? 1 : 0,
+        'biography' => $_POST['bio'],
+        'contract_agreed' => isset($_POST['contract_']) ? 1 : 0,
         'languages' => $_POST['languages'] ?? []
     ];
     
@@ -99,17 +95,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save'])) {
         // Обновление основной информации
         $stmt = $pdo->prepare("
             UPDATE applications 
-            SET fullname = ?, phone = ?, email = ?, birthdate = ?, gender = ?, bio = ?, contract_ = ?
+            SET full_name = ?, phone = ?, email = ?, birth_date = ?, gender = ?, biography = ?, contract_agreed = ?
             WHERE id = ?
         ");
         $stmt->execute([
-            $data['fullname'],
+            $data['full_name'],
             $data['phone'],
             $data['email'],
-            $data['birthdate'],
+            $data['birth_date'],
             $data['gender'],
-            $data['bio'],
-            $data['contract_'],
+            $data['biography'],
+            $data['contract_agreed'],
             $id
         ]);
         
@@ -354,13 +350,13 @@ if ($action === 'edit' && $id) {
                 <?php foreach ($applications as $app): ?>
                     <tr>
                         <td><?= $app['id'] ?></td>
-                        <td><?= htmlspecialchars($app['fullname']) ?></td>
+                        <td><?= htmlspecialchars($app['full_name']) ?></td>
                         <td><?= htmlspecialchars($app['phone']) ?></td>
                         <td><?= htmlspecialchars($app['email']) ?></td>
-                        <td><?= $app['birthdate'] ?></td>
+                        <td><?= $app['birth_date'] ?></td>
                         <td><?= $app['gender'] === 'male' ? 'Мужской' : ($app['gender'] === 'female' ? 'Женский' : 'Другой') ?></td>
                         <td><?= htmlspecialchars($app['languages']) ?></td>
-                        <td><?= $app['contract_'] ? 'Да' : 'Нет' ?></td>
+                        <td><?= $app['contract_agreed'] ? 'Да' : 'Нет' ?></td>
                         <td class="actions">
                             <a href="admin.php?action=edit&id=<?= $app['id'] ?>" class="btn btn-edit">Редактировать</a>
                             <a href="admin.php?action=delete&id=<?= $app['id'] ?>" class="btn btn-delete" onclick="return confirm('Вы уверены?')">Удалить</a>
@@ -378,7 +374,7 @@ if ($action === 'edit' && $id) {
                     
                     <div class="form-group">
                         <label for="fullname">ФИО:</label>
-                        <input type="text" id="fullname" name="fullname" value="<?= htmlspecialchars($edit_data['fullname']) ?>" required>
+                        <input type="text" id="fullname" name="fullname" value="<?= htmlspecialchars($edit_data['full_name']) ?>" required>
                     </div>
                     
                     <div class="form-group">
@@ -393,7 +389,7 @@ if ($action === 'edit' && $id) {
                     
                     <div class="form-group">
                         <label for="birthdate">Дата рождения:</label>
-                        <input type="date" id="birthdate" name="birthdate" value="<?= $edit_data['birthdate'] ?>" required>
+                        <input type="date" id="birthdate" name="birthdate" value="<?= $edit_data['birth_date'] ?>" required>
                     </div>
                     
                     <div class="form-group">
@@ -419,12 +415,12 @@ if ($action === 'edit' && $id) {
                     
                     <div class="form-group">
                         <label for="bio">Биография:</label>
-                        <textarea id="bio" name="bio"><?= htmlspecialchars($edit_data['bio']) ?></textarea>
+                        <textarea id="bio" name="bio"><?= htmlspecialchars($edit_data['biography']) ?></textarea>
                     </div>
                     
                     <div class="form-group checkbox-group">
                         <div class="checkbox-option">
-                            <input type="checkbox" id="contract_" name="contract_" value="1" <?= $edit_data['contract_'] ? 'checked' : '' ?>>
+                            <input type="checkbox" id="contract_" name="contract_" value="1" <?= $edit_data['contract_agreed'] ? 'checked' : '' ?>>
                             <label for="contract_">С контрактом ознакомлен(а)</label>
                         </div>
                     </div>
